@@ -62,7 +62,7 @@ omx.prototype.play = function(file, opts) {
 // fire up omxplayer
 omx.prototype.init = function(file, opts) {
   var cmdOptions = (opts || defaults).join(' ');
-  this.player = exec('omxplayer '+cmdOptions+' "'+file+'"');
+  this.player = exec('sudo omxplayer ' + cmdOptions + ' ' + file);
   this.emit('playing', file);
   this.state = STATES.PLAYING;
 
