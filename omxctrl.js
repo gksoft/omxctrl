@@ -67,7 +67,6 @@ omx.prototype.play = function(file, opts) {
 omx.prototype.init = function(file, opts) {
     var cmdOptions = (opts || defaults).join(' ');
 
-    //BUGXXXX
     this.player = exec('sudo omxplayer ' + cmdOptions + ' ' + file);
     //, function(error, stdout, stderr) {
     //     console.log('exec stdout: ' + stdout);
@@ -86,7 +85,6 @@ omx.prototype.init = function(file, opts) {
         this.emit('init', this.media);
     }.bind(this));
 
-    //BUGXXXX
     this.player.on('message', function(data) {
       this.emit('message', data);
     }.bind(this));
@@ -115,15 +113,11 @@ omx.prototype.init = function(file, opts) {
 // send a key command to omxplayer
 omx.prototype.send = function(key) {
     if (!this.player || this.state === STATES.IDLE || this.state === STATES.STOPPING  ) return;
-    //BUGXXXX
     try {
         this.player.stdin.write(key);
-        console.log(key);
     } catch (e) {
       this.emit('error', e);
     }
-
-    //this.player.stdin.write(key);
 };
 
 // check the current state
@@ -132,21 +126,16 @@ omx.prototype.getState = function() {
 };
 
 omx.prototype.pause = function() {
-    console.log('state is: ' + this.state);
     if (this.state === STATES.IDLE || this.state === STATES.STOPPING ) return;
     this.state = (this.state === STATES.PAUSED) ? STATES.PLAYING : STATES.PAUSED;
-    // this.state = (this.state === STATES.IDLE) ? STATES.PLAYING : STATES.PAUSED;
     this.send('p');
 };
 
 omx.prototype.stop = function() {
-  console.log('state is: '+ this.state );
   if (this.state === STATES.IDLE || this.state === STATES.STOPPING ) return;
 
-  console.log('child connected: '+ this.player.connected );
   this.send('q');
   this.state = STATES.STOPPING;
-  console.log('state is: '+ this.state);      
 };
 
 // build some nice methods for interacting
